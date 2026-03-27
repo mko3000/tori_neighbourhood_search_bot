@@ -1,0 +1,29 @@
+name: Deploy to kotipi
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          args: "--accept-routes"
+
+      - name: Deploy to kotipi
+        uses: appleboy/ssh-action@v1
+        with:
+          host: 100.74.124.45
+          username: kotipi
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/kotipi/projects/tori_neighbourhood_search_bot
+            git pull
+            source venv/bin/activate
+            pip install -r requirements.txt
+            sudo systemctl restart telegrambot
