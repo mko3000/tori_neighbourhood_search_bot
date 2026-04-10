@@ -1,7 +1,6 @@
 """
 Tori.fi scraper using the embedded React Query state from the search page.
 Location filtering uses a bbox derived from geocoding a free-text address + radius.
-Hope it's useful! 
 """
 
 import base64
